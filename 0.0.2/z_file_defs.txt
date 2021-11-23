@@ -1,0 +1,3 @@
+client.py - where the client sends messages outt to either reciever or server
+receiver.py - the direct messaging version of server, must be open on client's end to receive messages from the server
+server.py - the server terminal that receives messages from clients, then forwards it to the other clients' receiver window

@@ -1,4 +1,4 @@
-# Client 1.0.3
+# Client 1.0.4
 import socket, time, winsound, os, sys
 from multiprocessing import Process
 from threading import Thread as td
@@ -8,16 +8,31 @@ sys.setrecursionlimit(10**6)
 
 
 # Constants
+os.system('cls'); print("Starting...\n[#########                     ]")
+
 DRIVELETTER = str(os.environ['WINDIR'].split(":\\")[0])
+
+time.sleep(0.25)
+os.system('cls'); print("Starting...\n[###################           ]")
+time.sleep(0.25)
+
 DATAPATH = DRIVELETTER + ":/ProgramData/PDS.comSoft"
+
+time.sleep(0.25)
+os.system('cls'); print("Starting...\n[########################      ]")
+time.sleep(0.25)
+
 try:
     VERSION = open(DATAPATH + "/softwareVersion", "r").read()
+    
+    os.system('cls'); print("Starting...\n[##############################]")
+    time.sleep(0.25)
 except:
-    os.system('cls'); print("[STARTUP FAILED: CRITICAL FILES MISSING]")
+    print("[STARTUP FAILED: CRITICAL FILES MISSING]")
     time.sleep(999)
 
 # Print the version number
-print("ComSoft Client " + VERSION + "\n")
+os.system('cls');time.sleep(0.75); print("ComSoft Client " + VERSION + "\n")
 
 # Sever IP and port constants
 HOST, PORT = input("Server IP > "), 1500 # Set up the host and port values
@@ -41,7 +56,8 @@ knownHosts = knownHostsFile.read()
 # Safety filter
 if (HOST in knownHosts): # Checks if the host is in the known hosts file
     # Do nothing
-    print("")
+    NotImplemented
+
 else:
     print("Warning: The specified host (" + HOST + ") is not in the known hosts file and might pose a security risk.")
     allowConnection = input("Do you want to complete the connection? [Y/N] > ").capitalize()
@@ -80,7 +96,7 @@ def createMessage():
     global message
     message = input("Message > ")
     if allowMessaging == True: # Makes sure to only send if the user is allowed to based on their rate caps
-        if (message == "exit" or message == "quit" or message == "changeName"):
+        if (message == "exit" or message == "quit" or message == "changeName" or message == "help" or message == "mute"):
             commandProcessor(message)
         else:
             sendMessage(message)
@@ -122,7 +138,20 @@ def commandProcessor(command):
             sock.close()
 
         name = tempName # Transfer the name stored in tempName to the global name variable
+    
+    elif (command == "mute"): # Mute notification sounds
+        if (os.path.isfile(DATAPATH + "/mute") == False):
+            open(DATAPATH + "/mute", "x").close() # Adds the file that mutes the notifications
+        else:
+            os.remove(DATAPATH + "/mute") # Removes the file that mutes the notifications
 
+    elif (command == "help"):
+        print("\n[Help]\n'help': get this message\n'exit' or 'quit': disconnect safely\n'changeName': change your name on the server\n'mute': toggle notifications")
+
+    else:
+        print("Command not found - did you type it right? [Use 'help' to get a list of safe commands]")
+    
+    print("") # Blank line
 
 # Make sure the user doesn't spam - they get kicked if they do
 def checkRate():
@@ -138,7 +167,7 @@ def checkRate():
             sendMessage(" kicked for spam") # Forcefully disconnect the user
             os.abort()
 
-# Decreases the amount of messages they have sent at a 1.5:1 ratio
+# Decreases message count at a fixed rate
 def rateTimer():
     global messageCount
     while True:
@@ -154,7 +183,7 @@ def mainLoop():
         createMessage()
         mainLoop()
 
-# Main subthread
+# Start the messaging thread
 mainThread = td(target=mainLoop, name="message processor core")
 mainThread.start()
 
@@ -172,12 +201,11 @@ def crashRecovery():
     crashRecovery()
 
 
-# Create all the service threads - NOTHING runs in the main thread other than initial setup
+# Create all the service threads
 checkerThread = td(target=checkRate, name="message counter")
 rateThread = td(target=rateTimer, name="message counting timer")
-# mainThreadRecovery = td(target=crashRecovery, name="automated crash recovery for main thread")
 checkerThread.start()
 rateThread.start()
-# mainThreadRecovery.start()
 
+# Start the crash recovery service
 crashRecovery()

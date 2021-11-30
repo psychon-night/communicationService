@@ -1,4 +1,4 @@
-# Receiver version 1.0.3
+# Receiver version 1.0.4
 import socketserver, socket, winsound, time, os
 
 # Constants
@@ -9,6 +9,11 @@ try:
 except:
     os.system('cls'); print("[STARTUP FAILED: CRITICAL FILES MISSING]")
     time.sleep(999)
+
+# Functions
+def playsound(type):
+    if (os.path.isfile(DATAPATH + "/mute") == False):
+        winsound.MessageBeep(type)
 
 # Print the version info
 print("ComSoft Receiver " + VERSION + "\n")
@@ -21,7 +26,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
     def handle(self):
         self.data = self.request.recv(4096).strip() # Grab the data that was sent to the server
 
-        winsound.MessageBeep(winsound.MB_ICONEXCLAMATION) # Notification sound
+        playsound(winsound.MB_ICONEXCLAMATION) # Notification sound
 
         print(self.data.decode()) # Print the message on-screen
 

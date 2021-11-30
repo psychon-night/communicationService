@@ -1,6 +1,19 @@
-import socketserver, socket, winsound, time
+# Receiver version 1.0.3
+import socketserver, socket, winsound, time, os
 
-print("Starting DM server...")
+# Constants
+DRIVELETTER = str(os.environ['WINDIR'].split(":\\")[0])
+DATAPATH = DRIVELETTER + ":/ProgramData/PDS.comSoft"
+try:
+    VERSION = open(DATAPATH + "/softwareVersion", "r").read()
+except:
+    os.system('cls'); print("[STARTUP FAILED: CRITICAL FILES MISSING]")
+    time.sleep(999)
+
+# Print the version info
+print("ComSoft Receiver " + VERSION + "\n")
+
+print("Starting receiver...")
 time.sleep(2.5)
 
 class MyTCPHandler(socketserver.BaseRequestHandler):

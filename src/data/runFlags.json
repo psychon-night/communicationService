@@ -1,0 +1,8 @@
+{
+    "flags": {
+    "fastBoot": false,
+    "silentStart": false,
+    "disableColors": false,
+    "simpleCommands": false
+    }
+}

@@ -1,30 +1,30 @@
-# Installer for version 1.0.5
-SOFTWARE_VERSION = "1.0.5"
+# Installer for version 1.0.6
+SOFTWARE_VERSION = "1.0.6"
 
 # Imports
-import time, os, sys
+import time, os, sys, shutil
 from urllib import request as urlRequest
 
 os.system("color")
 
 DRIVELETTER = str(os.environ['WINDIR'].split(":\\")[0])
 
-DATAPATH = DRIVELETTER + ":/ProgramData/PDS.comSoft" # Where the data files are
+DATAPATH = DRIVELETTER + ":/ProgramData/Shoutout" # Where the data files are
 CWD = os.path.dirname(__file__) # The current directory
-RUNPATH = DRIVELETTER + ":/Users/" + os.getlogin() + "/Desktop/pds.comsoft" # Where the runnable files are
+RUNPATH = DRIVELETTER + ":/Users/" + os.getlogin() + "/Desktop/Shoutout" # Where the runnable files are
 
 # Web-based constants
 try:
     LATESTVERSION = str(urlRequest.urlopen("https://247086.github.io/communicationService/latestVersion.html").read(), "'UTF-8'")
 except Exception as err:
-    print(err)
+    print("There was a problem while getting the latest version ID: " + str(err) + ". Please check your network connection, and that 247086.github.io and github.com are reachable")
     time.sleep(999)
 
 # Check if there's a new version available
 try:
         version = open(DATAPATH + "/softwareVersion").read()
 
-        if (int(str(version).strip("1.0.")) < int(str(LATESTVERSION).strip("1.0."))):
+        if (int(str(version).strip("1.0.")) < int(str(LATESTVERSION).strip("1.0."))): # Checks if the user's trying to update to the same version
             NotImplemented
         
         else:
@@ -41,7 +41,8 @@ except: # Looks like there isn't an installation
 
     else:
         NotImplemented # Keep going
-    
+
+
 try:
     print("Latest version: " + LATESTVERSION + "Current version: " + version)
 except:
@@ -55,6 +56,7 @@ newServer = None
 try:
     newClient = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/client.py").read(), "'UTF-8'")
     newServer = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/server.py").read(), "'UTF-8'")
+    flags = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/data/runFlags.json").read(), "'UTF-8'")
 
 except Exception as err:
     print("Failed to download the latest version's code: " + str(err))
@@ -97,12 +99,13 @@ else:
 
 
 
-print("\nKeep this window open during the installation process!\n")
+print("\nKeep this window open during the installation process!")
 
 
-time.sleep(1.5)
+time.sleep(2.35)
 
 
+# The main function to update data
 if (mode == "update"): # Only update the data - 1.0.5 and later checks to make sure that receiver.py is removed
 
     if (runnableExists == False):
@@ -127,7 +130,7 @@ if (mode == "update"): # Only update the data - 1.0.5 and later checks to make s
 
     # Try to remove the receiver file
     try:
-        os.remove(RUNPATH + "/receiver.py")
+        os.remove(RUNPATH + "/receiver.py") # Delete receiver.py
         os.system('cls'); print("Updating from version " + version + " to " + LATESTVERSION); print("\u001b[33m[##############################]\u001b[0m")
     except:
         # File was already removed
@@ -137,53 +140,53 @@ if (mode == "update"): # Only update the data - 1.0.5 and later checks to make s
     time.sleep(5)
 
 else: # Create entirely new data
-    os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/PDS.comSoft\n"); print("\u001b[33m[                              ]\u001b[0m")
+    os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[                              ]\u001b[0m")
     
-    # The new runnable files
+    # The new runnable files (stored on Github)
     clientFile = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/client.py").read(), "'UTF-8'")
     serverFile = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/server.py").read(), "'UTF-8'")
-    installerFile = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/management/installer.py").read(), "'UTF-8'")
-    uninstallerFile = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/management/uninstaller.py").read(), "'UTF-8'")
-    repairFile = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/management/repair.py").read(), "'UTF-8'")
+    
+    # Data
+    flags = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/data/runFlags.json").read(), "'UTF-8'")
 
     time.sleep(0.75)
 
     try:
         # Make the directories
         os.mkdir(DATAPATH) # Create the data path
-        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/PDS.comSoft\n"); print("\u001b[33m[#####                         ]\u001b[0m")
+        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[#####                         ]\u001b[0m")
         time.sleep(0.75)
         os.mkdir(DATAPATH + "/client") # Create the client data path
-        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/PDS.comSoft\n"); print("\u001b[33m[##########                    ]\u001b[0m")
+        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[##########                    ]\u001b[0m")
         time.sleep(0.75)
         os.mkdir(DATAPATH + "/server") # Create the server data path
-        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/PDS.comSoft\n"); print("\u001b[33m[###############               ]\u001b[0m")
+        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[###############               ]\u001b[0m")
+        time.sleep(0.75)
+        os.mkdir(DATAPATH + "/data") # Create the data path
+        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[#################             ]\u001b[0m")
         time.sleep(0.75)
         os.mkdir(RUNPATH) # Create the runnable file path
-        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/PDS.comSoft\n"); print("\u001b[33m[####################          ]\u001b[0m")
+        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[####################          ]\u001b[0m")
         time.sleep(0.75)
 
         # Create the runnable files inside the desktop folder
         open(RUNPATH + "/client.py", "x").write(clientFile)
-        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/PDS.comSoft\n"); print("\u001b[33m[######################        ]\u001b[0m")
+        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[######################        ]\u001b[0m")
         time.sleep(0.75)
         open(RUNPATH + "/server.py", "x").write(serverFile)
-        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/PDS.comSoft\n"); print("\u001b[33m[#########################     ]\u001b[0m")
+        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[#########################     ]\u001b[0m")
         time.sleep(0.75)
-        os.mkdir(RUNPATH + "/management")
-        open(RUNPATH + "/management/installer.py", "x").write(installerFile)
-        open(RUNPATH + "/management/uninstaller.py", "x").write(uninstallerFile)
-        open(RUNPATH + "/management/repair.py", "x").write(repairFile)
 
         # Create the required files in the data folder
         open(DATAPATH + "/softwareVersion", "x").write(SOFTWARE_VERSION) # Create the file that stores the software version
-        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/PDS.comSoft\n"); print("\u001b[33m[############################  ]\u001b[0m")
+        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[############################  ]\u001b[0m")
         time.sleep(0.75)
         open(DATAPATH + "/client/knownHosts", "x").close() # Create the client's known hosts file
-        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/PDS.comSoft\n"); print("\u001b[33m[############################# ]\u001b[0m")
+        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[############################# ]\u001b[0m")
         time.sleep(0.75)
         open(DATAPATH + "/server/bannedIP", "x").close() # Create the server's banned IPs file
-        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/PDS.comSoft\n"); print("\u001b[33m[##############################]\u001b[0m")
+        open(DATAPATH + "/data/runFlags", "x").write(flags) # Create the server's flags file, where the user can change specific flags to effect software operation
+        os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[##############################]\u001b[0m")
         time.sleep(0.75)
     
     except Exception as err:
@@ -196,9 +199,8 @@ else: # Create entirely new data
             import uninstaller # Runs it on import
             os.system('cls')
             import installer # Runs it on import
-            print("The installer was able to install the program sucessfully! You can find the runnable files on your desktop, in the folder named 'pds.comsoft'")
 
 
     time.sleep(1)
-    print("\nDone - you can find the newly installed (runnable) files on your desktop, in the folder named 'pds.comsoft'")
+    print("\nDone - you can find the newly installed (runnable) files on your desktop, in the folder named 'Shoutout'")
     time.sleep(7)

@@ -37,9 +37,9 @@ if True: # The other code was already indented and I don't want to fix it
         newClient = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/client.py").read(), "'UTF-8'")
         newServer = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/server.py").read(), "'UTF-8'")
 
-        installerFile = open(__file__, "r").read()
-        uninstallerFile = open(CWD + "/uninstaller.py", "r").read()
-        repairFile = open(CWD + "/repair.py", "r").read()
+        installerFile = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/management/installer.py").read(), "'UTF-8'")
+        uninstallerFile = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/management/uninstaller.py").read(), "'UTF-8'")
+        repairFile = str(urlRequest.urlopen("https://247086.github.io/communicationService/src/management/repair.py").read(), "'UTF-8'")
         
     except Exception as err:
         print("Failed to download the new files: " + str(err))

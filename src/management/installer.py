@@ -22,7 +22,7 @@ except Exception as err:
 
 # Check if there's a new version available
 try:
-        version = open(DATAPATH + "/softwareVersion").read()
+        version = open(DATAPATH + "/data/softwareVersion").read()
 
         if (int(str(version).strip("1.0.")) < int(str(LATESTVERSION).strip("1.0."))): # Checks if the user's trying to update to the same version
             NotImplemented
@@ -35,7 +35,7 @@ try:
 
 
 except: # Looks like there isn't an installation
-    if (os.path.isdir(DATAPATH) == True and os.path.isfile(DATAPATH + "/version") == False):
+    if (os.path.isdir(DATAPATH) == True and os.path.isfile(DATAPATH + "/data/softwareVersion") == False):
         print("There's a problem with your installation!")
         time.sleep(999)
 
@@ -178,14 +178,14 @@ else: # Create entirely new data
         time.sleep(0.75)
 
         # Create the required files in the data folder
-        open(DATAPATH + "/softwareVersion", "x").write(SOFTWARE_VERSION) # Create the file that stores the software version
+        open(DATAPATH + "/data/softwareVersion", "x").write(SOFTWARE_VERSION) # Create the file that stores the software version
         os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[############################  ]\u001b[0m")
         time.sleep(0.75)
         open(DATAPATH + "/client/knownHosts", "x").close() # Create the client's known hosts file
         os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[############################# ]\u001b[0m")
         time.sleep(0.75)
         open(DATAPATH + "/server/bannedIP", "x").close() # Create the server's banned IPs file
-        open(DATAPATH + "/data/runFlags", "x").write(flags) # Create the server's flags file, where the user can change specific flags to effect software operation
+        open(DATAPATH + "/data/runFlags.jsonc", "x").write(flags) # Create the server's flags file, where the user can change specific flags to effect software operation
         os.system('cls'); print("Installing on drive " + DRIVELETTER + " in /ProgramData/Shoutout\n"); print("\u001b[33m[##############################]\u001b[0m")
         time.sleep(0.75)
     
@@ -203,4 +203,5 @@ else: # Create entirely new data
 
     time.sleep(1)
     print("\nDone - you can find the newly installed (runnable) files on your desktop, in the folder named 'Shoutout'")
+    print("\nTo get started, go to your desktop, open 'Shoutout', and start client.py")
     time.sleep(7)

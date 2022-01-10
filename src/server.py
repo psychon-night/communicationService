@@ -1,4 +1,4 @@
-# Server version 1.0.4
+# Server version 1.0.6
 # Imports
 import socketserver, socket, time, winsound, os, locale, sys, ctypes
 from threading import Thread as td
@@ -93,7 +93,7 @@ if not (SILENTSTART in flags):
     if not (FASTBOOT in flags):
         # Let the user know that the server is being started
         if (os.path.isfile(DATAPATH + "/mute") == False):
-            print(SERVERMSG + "Starting server (" + str(locale.getlocale()) + ")" + RESET)
+            print(SERVERMSG + "Starting server (" + str(locale.getlocale()[0]) + ")" + RESET)
 
         else:
             print(SERVERMSG + "Starting server (" + str(locale.getlocale()) + LOCALMSG + ") in silent mode - use 'mute' to enable sound" + RESET)
